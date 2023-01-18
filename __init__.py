@@ -80,18 +80,18 @@ def get_hwp_text(filename):
     
     return text
 
-def pcsi_setting(name='', 
+def pcsi_setting(survey_name='', 
                 division='', 
                 key_texts = ['SQ3', 'SQ4'], 
                 info_text_key = '면접원 지시사항', 
                 qnr_folder = 'QNR', 
                 save_folder = 'SET') :
 
-    if name == '' or not type(name) == 'string' :
+    if survey_name == '' or not type(survey_name) == str :
         print('❌ ERROR : 기관명은 문자형으로 입력')
         return
 
-    if division == '' or not type(division) == 'string' or not division in ['KMAC', 'KSA']:
+    if division == '' or not type(division) == str or not division in ['KMAC', 'KSA']:
         print('❌ ERROR : 구분은 KMAC/KSA로만 입력 (대소문자 정확하게)')
         return
 
@@ -189,7 +189,7 @@ def pcsi_setting(name='',
 
     # 기관명 세팅 관련
     name_set = new_ws.cell(27, 6)
-    name_set.value = name_set.value%(name)
+    name_set.value = name_set.value%(survey_name)
 
 
     # 설문지 분류 셀 관련
@@ -213,7 +213,7 @@ def pcsi_setting(name='',
         js_logics.append(word)
 
     QQQ1_set = new_ws.cell(16, 8)
-    QQQ1_set.value = QQQ1_set.value%(name, '\n'.join(js_logics))
+    QQQ1_set.value = QQQ1_set.value%(survey_name, '\n'.join(js_logics))
 
     # 설문 타입 오토펀치 syntax
     q_type_quto = []
@@ -262,9 +262,16 @@ def pcsi_setting(name='',
     info_cell = new_ws.cell(33, 8)
     info_cell.value = info_cell.value%('\n'.join(info_texts))
 
+
+    # save
+    save_filename = f'PCSI_{division}_{survey_name}.xlsx'
+    new_wb.save(os.path.join(os.getcwd(), save_folder, save_filename))
+
     print('💠 PCSI 스마트 서베이 확인 사항')
     print('   - SQ/DQ 밑 설문지별 수정되는 변수 확인 필요')
-    print('   - DQ 문항 : KMAC은 개인/법인 상관없이 DQ에서 직업만 확인')
-    print('   - DQ 문항 : KSA는 개인의 경우 직업, 법인의 경우 직원수를 질문')
+    print('   - SQ1/SQ2도 설문지에 따라 다를 수 있음')
+    print('   - DQ2 문항 : KMAC은 개인/법인 상관없이 DQ2에서 직업만 확인')
+    print('   - DQ2 문항 : KSA는 개인의 경우 직업, 법인의 경우 직원수를 질문')
     print('   - 실사 담당자 전화번호 확인')
     print('   - 실사 시작전에 히든 변수 display_yn(n) 설정 해줄 것')
+    print('   - 쿼터 세팅 확인')
