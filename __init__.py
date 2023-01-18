@@ -329,9 +329,8 @@ def pcsi_setting(survey_name='',
     # 기관별 문항 타입 구분
     if division == 'KMAC' :
         # DQ2
+        new_ws.cell(66, 7).value = None
         new_ws.delete_rows(68, 3)
-        new_ws.cell(67, 7).value = None
-
         new_ws.delete_rows(56, 9)
 
     if division == 'KSA' :
