@@ -141,8 +141,7 @@ def pcsi_setting(survey_name='',
             set_word = set_word.replace('○○', '고객')
             set_word = set_word.replace(f'{key}. ', '')
             set_word = set_word.replace(f'{key}】 ', '')
-            if name in set_word :
-                set_word = set_word.replace(survey_name, f'<font color=blue>{survey_name}</font>')
+            set_word = set_word.replace(survey_name, f'<font color=blue>{survey_name}</font>')
             change_cells[key][code] = set_word.strip()
         
         # KSA ONLY
@@ -169,8 +168,7 @@ def pcsi_setting(survey_name='',
 
             if info_flag :
                 set_word = tx
-                if survey_name in set_word :
-                    set_word = set_word.replace(survey_name, f'<font color=blue>{survey_name}</font>')
+                set_word = set_word.replace(survey_name, f'<font color=blue>{survey_name}</font>')
                 info_txt.append(set_word.strip())
         
         info_txt = '<br/><br/>'.join(info_txt)
@@ -412,18 +410,27 @@ def pcsi_setting(survey_name='',
     # KSA Q8 XML 세팅
     Q8_array = ''
     Q8_rows = ''
+    HQ8_rows = ''
+
     if division == 'KSA' :
         # exec setting
         Q8_array = {f'r{code}' : arr for code, arr in change_cells['Q8'].items()}
         
         # rows setting
         max_array_length = max([len(i) for i in change_cells['Q8'].values()])
+
+        HQ8_rows = []
         Q8_rows = []
+        
         for idx, i in enumerate(list(range(1, max_array_length+1))) :
-            word = f'<row label="_{i}" value="{i}">{i}. ${{Q8rows[QQQ14.selected.label][{idx}]}}</row>'
+            hword = f'<row label="r{i}" value="{i}"/>'
+            HQ8_rows.append(hword)
+            
+            word = f'<row label="_{i}" value="{i}">{i}. ${{HQ8X1.r{i}.unsafe_val}}</row>'
             Q8_rows.append(word)
 
         Q8_rows = '\n'.join(Q8_rows)
+        HQ8_rows = '\n'.join(HQ8_rows)
 
     xml_Q8_after = {
         'KMAC' : f'''<textarea
@@ -435,22 +442,39 @@ def pcsi_setting(survey_name='',
 </textarea>
 <suspend/>''',
 
-        'KSA' : f'''<define label="Q8X1_list">
+        'KSA' : f'''<text
+  label="HQ8X1"
+  size="40"
+  optional="1"
+  where="execute">
+  <title>(HIDDEN) Q8-1 제시 속성</title>
+  <comment></comment>
+<exec>
+Q8attrs = {Q8_array}
+attrs = Q8attrs[QQQ14.selected.label]
+for idx, attr in enumerate(attrs) :
+  HQ8X1.rows[idx].val = attr
+</exec>
+{HQ8_rows}
+</text>
+<suspend/>
+
+
+<define label="Q8X1_list">
 {Q8_rows}
 </define>
 
+<suspend/>
+
 <radio
   label="Q8X1"
-  rowCond="row.index lt len(Q8rows[QQQ14.selected.label])"
+  rowCond="HQ8X1.rows[row.index]"
   uses="cardrating.1"
   cardrating:completion="${{res.cardrating_msg}}"
   cardrating:lrg_maxwidth="100px">
   <title>문 8】 <strong>${{res.pcsi_name}}</strong>에서 경험하신 서비스의 단계에 대해 고객님께서 만족하시는 정도에 따라 0점(매우 불만족), 1, 2, 3, 4, 5, 6, 7, 8, 9, 10(매우 만족)점 중에서 골라주세요.
 만족하시는 정도가 클수록 높은 점수, 작을수록 낮은 점수를 주시면 됩니다.</title>
   <comment></comment>
-<exec>
-Q8rows = {Q8_array}
-</exec>
   <col label="c0" value="0">(0)<br/>매우<br/>불만족</col>
   <col label="c1" value="1">(1)</col>
   <col label="c2" value="2">(2)</col>
@@ -469,11 +493,10 @@ Q8rows = {Q8_array}
 <checkbox
   label="HQ8X2"
   atleast="0"
-  rowCond="row.index lt len(Q8rows[QQQ14.selected.label])"
+  rowCond="HQ8X1.rows[row.index]"
   where="execute">
   <title>(HIDDEN) Q8X1 낮은 점수</title>
   <exec>
-Q8rows = {Q8_array}
 Q8X1_answers = [eachRow.val for eachRow in Q8X1.rows if eachRow.displayed]
 min_value = min(Q8X1_answers)
 for eachRow in HQ8X2.rows :
@@ -493,9 +516,6 @@ for eachRow in HQ8X2.rows :
   rowCond="HQ8X2[row]">
   <title>문 8-2】 그중에서 가장 불만족한 단계는 무엇입니까?</title>
   <comment></comment>
-<exec>
-Q8rows = {Q8_array}
-</exec>
   <insert source="Q8X1_list" />
 </radio>
 <suspend/>
@@ -628,7 +648,8 @@ Q8rows = {Q8_array}
   size="3"
   cond="QQQ12.r2"
   optional="0"
-  ss:postText="명">
+  ss:postText="명"
+  verify="range(0, 99999)">
   <title>DQ2. 고객님께서 속해계시는 사업체의 직원 수는 몇 명입니까?</title>
   <comment></comment>
   <noanswer label="na">해당 없음</noanswer>
@@ -668,7 +689,7 @@ else :
 
     xml = f'''<?xml version="1.0" encoding="UTF-8"?>
 <survey 
-  alt="PCSI_{survey_name}"
+  alt="PCSI_{survey_name}_현장조사"
   autosaveKey="UID"
   browserDupes=""
   builder:wizardCompleted="1"
@@ -793,6 +814,9 @@ else :
 
 .gridRank .grid{{
     display: none !important;
+}}
+.survey-body{{
+  margin-top: 5% !important;
 }}
 </style>
 ]]></style>
@@ -1001,21 +1025,6 @@ status(True,'r2')
   optional="0">
   <title>면접원 정보</title>
   <comment></comment>
-<style name='el.text' rows="name"> <![CDATA[
-<div style="display: flex; flex-direction: row;">
-  <div>
-    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" style="width:25px; margin:0 auto;">
-      <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-6-3a2 2 0 11-4 0 2 2 0 014 0zm-2 4a5 5 0 00-4.546 2.916A5.986 5.986 0 0010 16a5.986 5.986 0 004.546-2.084A5 5 0 0010 11z" clip-rule="evenodd" />
-    </svg>
-  </div>
-  <div>
-\@if row.styles.ss.preText or this.styles.ss.preText
-    ${{row.styles.ss.preText or this.styles.ss.preText or ""}}&nbsp;
-\@endif
-    <input type="text" name="$(name)" id="$(id)" value="$(value)" size="$(size)" class="input text-input" $(extra)/>
-  </div>
-</div>
-]]></style>
 <style name='el.text' rows="date"> <![CDATA[
 \@if row.styles.ss.preText or this.styles.ss.preText
     ${{row.styles.ss.preText or this.styles.ss.preText or ""}}&nbsp;
@@ -1027,6 +1036,7 @@ status(True,'r2')
 ]]></style>
   <row label="name" ss:preText="이름"/>
   <row label="date" ss:preText="면접일시"/>
+  <row label="time" verify="number;range(1,24);" ss:preText="시간" size="2"/>
 </text>
 <suspend/>
 
