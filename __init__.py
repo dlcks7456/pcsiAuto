@@ -95,8 +95,11 @@ def pcsi_setting(survey_name='',
         print('❌ ERROR : 구분은 KMAC/KSA로만 입력 (대소문자 정확하게)')
         return
 
-    hwps = os.listdir(qnr_folder)
-    hwps = [i for i in hwps if '.hwp' in i]
+    curr_files = os.listdir(qnr_folder)
+    curr_files = {int(i.split('.')[0]):i for i in curr_files if '.hwp' in i}
+    sort_files = sorted(curr_files.items())
+    
+    hwps = [hwp for key, hwp in sort_files]
 
     key_texts = []
     if division == 'KMAC' :
@@ -450,6 +453,13 @@ def pcsi_setting(survey_name='',
         Q8_rows = '\n'.join(Q8_rows)
         HQ8_rows = '\n'.join(HQ8_rows)
 
+
+    op_num = ''
+    if division == 'KMAC' :
+      op_num = 'OP-000141831'
+    if division == 'KSA' :
+      op_num = 'OP-000155091'
+
     xml_Q8_after = {
         'KMAC' : f'''<textarea
   label="Q8"
@@ -707,7 +717,7 @@ else :
 
     xml = f'''<?xml version="1.0" encoding="UTF-8"?>
 <survey 
-  alt="PCSI_{survey_name}_현장조사"
+  alt="{op_num}_PCSI_{division}_{survey_name}_현장조사"
   autosaveKey="UID"
   browserDupes=""
   builder:wizardCompleted="1"
@@ -772,7 +782,6 @@ else :
 <suspend/>
 
 <style name="respview.client.css"><![CDATA[
-<link rel="shortcut icon" href="/survey/selfserve/NIQ.svg" type="image/x-icon">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
 <link rel="stylesheet" href="[rel util.css]"/>
 <style>
