@@ -183,6 +183,7 @@ def pcsi_setting(survey_name='',
                 info_txt.append(set_word.strip())
         
         info_txt = '<br/><br/>'.join(info_txt)
+        info_txt = info_txt.replace('<br/><br/><br/><br/>', '<br/><br/>')
         change_cells['info'][code] = info_txt
         
 
