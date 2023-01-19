@@ -164,6 +164,7 @@ def pcsi_setting(survey_name='',
             Q8_array = []
             for idx, tx in enumerate(curr_hwp) :
                 if '8-' in tx and not '】' in tx:
+                  if not '실사 책임자' in tx :
                     Q8_array.append(curr_hwp[idx+1])
 
             change_cells['Q8'][code] = Q8_array
@@ -497,9 +498,7 @@ for idx, attr in enumerate(attrs) :
 <radio
   label="Q8X1"
   rowCond="HQ8X1.rows[row.index]"
-  uses="cardrating.1"
-  cardrating:completion="${{res.cardrating_msg}}"
-  cardrating:lrg_maxwidth="100px">
+  surveyDisplay="desktop">
   <title>문 8】 <strong>${{res.pcsi_name}}</strong>에서 경험하신 서비스의 단계에 대해 고객님께서 만족하시는 정도에 따라 0점(매우 불만족), 1, 2, 3, 4, 5, 6, 7, 8, 9, 10(매우 만족)점 중에서 골라주세요.
 만족하시는 정도가 클수록 높은 점수, 작을수록 낮은 점수를 주시면 됩니다.</title>
   <comment></comment>
@@ -1046,30 +1045,30 @@ status(True,'r2')
 
 <suspend/>
 
-<text
+<text 
   label="InterData"
-  size="40"
-  optional="0">
+  optional="0"
+  size="40">
   <title>면접원 정보</title>
-  <comment></comment>
-  <validate>
-if this.time.val.isdigit() :
-  if not int(this.time.val) in range(1, 25) :
-    error('시간은 1~24까지의 숫자로 입력 부탁드립니다.')
-  </validate>
-<style name='el.text' rows="date"> <![CDATA[
+<style name='el.text' rows="time"> <![CDATA[
 \@if row.styles.ss.preText or this.styles.ss.preText
     ${{row.styles.ss.preText or this.styles.ss.preText or ""}}&nbsp;
 \@endif
-<input type="date" name="$(name)" min="2023-01-01" max="2023-12-31" placeholder="년-월-일" id="$(id)" value="$(value)" size="$(size)" class="input text-input" $(extra)/>
+<select name="$(name)" class="input dropdown"> 
+<option></option>
+\@for item in range(9, 19)
+<option value="$(item)" ${{"SELECTED" if str(item)==ec.value else ""}}>$(item)</option> 
+\@end
+</select>
 \@if row.styles.ss.postText or this.styles.ss.postText
     &nbsp;${{row.styles.ss.postText or this.styles.ss.postText or ""}}
 \@endif
 ]]></style>
-  <row label="name" ss:preText="이름"/>
-  <row label="date" ss:preText="면접일시"/>
-  <row label="time" verify="number" ss:preText="시간" size="2"/>
+  <row label="name" ss:preText="이름" size="8"/>
+  <row label="time" ss:preText="시작 시간" ss:postText="시"/>
+  <row label="area" ss:preText="조사 장소"/>
 </text>
+
 <suspend/>
 
 <pipe
@@ -1244,9 +1243,7 @@ status(SQ3.r2,"SQ3")
 
 <radio
   label="Q1"
-  uses="cardrating.1"
-  cardrating:completion="${{res.cardrating_msg}}"
-  cardrating:lrg_maxwidth="100px">
+  surveyDisplay="desktop">
   <title>문 1】 먼저 <strong>${{res.pcsi_name}}</strong>에서 제공하는 서비스의 핵심내용 등에 대해 질문 드리겠습니다.<br/>각 질문에 대해 고객님께서 동의하시는 정도에 따라 보기(11개) 중에서 골라주세요.<br/>[pipe: Q1_pipe]</title>
   <comment></comment>
   <col label="c0" value="0">(0)<br/>전혀<br/>그렇지<br/>않다</col>
@@ -1278,9 +1275,7 @@ status(SQ3.r2,"SQ3")
 
 <radio
   label="Q2"
-  uses="cardrating.1"
-  cardrating:completion="${{res.cardrating_msg}}"
-  cardrating:lrg_maxwidth="100px">
+  surveyDisplay="desktop">
   <title>문 2】 다음은 <strong>${{res.pcsi_name}}</strong>의 서비스 제공 과정에 대한 질문입니다. 앞서 응답하신 방법대로 각 질문에 대해 고객님께서 동의하시는 정도에 따라 보기(11개) 중에서 골라주세요.</title>
   <comment></comment>
   <col label="c0" value="0">(0)<br/>전혀<br/>그렇지<br/>않다</col>
@@ -1319,9 +1314,7 @@ status(SQ3.r2,"SQ3")
 
 <radio
   label="Q3"
-  uses="cardrating.1"
-  cardrating:completion="${{res.cardrating_msg}}"
-  cardrating:lrg_maxwidth="100px">
+  surveyDisplay="desktop">
   <title>문 3】 다음은 <strong>${{res.pcsi_name}}</strong>의 서비스 제공 환경에 대한 질문입니다. 앞서 응답하신 방법대로 각 질문에 대해 고객님께서 동의하시는 정도에 따라 보기(11개) 중에서 골라주세요.</title>
   <comment></comment>
   <col label="c0" value="0">(0)<br/>전혀<br/>그렇지<br/>않다</col>
@@ -1344,9 +1337,7 @@ status(SQ3.r2,"SQ3")
 
 <radio
   label="Q4"
-  uses="cardrating.1"
-  cardrating:completion="${{res.cardrating_msg}}"
-  cardrating:lrg_maxwidth="100px">
+  surveyDisplay="desktop">
   <title>문 4】 다음은 <strong>${{res.pcsi_name}}</strong>이 공공기관으로서 수행하는 사회적 책임과 역할에 대한 질문입니다. 앞서 응답하신 방법대로 각 질문에 대해 고객님께서 동의하시는 정도에 따라 보기(11개) 중에서 골라주세요.</title>
   <comment></comment>
   <col label="c0" value="0">(0)<br/>전혀<br/>그렇지<br/>않다</col>
@@ -1448,9 +1439,7 @@ status(SQ3.r2,"SQ3")
 
 <radio
   label="Q6"
-  uses="cardrating.1"
-  cardrating:completion="${{res.cardrating_msg}}"
-  cardrating:lrg_maxwidth="100px">
+  surveyDisplay="desktop">
   <title>※ 다음은 고객님께서 <strong>${{res.pcsi_name}}</strong>의 서비스 이용경험 후 느끼신 전반적인 평가에 대한 질문입니다.<br/>[pipe: Q6_pipe]</title>
   <comment></comment>
   <col label="c0" value="0">(0)<br/>전혀<br/>그렇지<br/>않다</col>
