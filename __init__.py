@@ -83,8 +83,9 @@ def get_hwp_text(filename):
 def pcsi_setting(survey_name='', 
                 division='', 
                 info_text_key = '면접원 지시사항', 
+                da='정윤교',
                 qnr_folder = 'QNR', 
-                save_folder = 'SET') :
+                save_folder = 'SET',) :
 
     if survey_name == '' or not type(survey_name) == str :
         print('❌ ERROR : 기관명은 문자형으로 입력')
@@ -114,6 +115,16 @@ def pcsi_setting(survey_name='',
         'G' : 7,
         'H' : 8
     }
+
+    da_num = {
+        '정윤교' : 7353,
+        '문영선' : 7311,
+        '고혜경' : 7267,
+        '조성희' : 7314,
+        '전미림' : 7228,
+        '정미지' : 7189,
+    }
+
 
     change_cells = OrderedDict()
     for key in key_texts :
@@ -206,6 +217,10 @@ def pcsi_setting(survey_name='',
     name_set = new_ws.cell(27, 6)
     name_set.value = name_set.value%(survey_name)
 
+    # 실사 담당자 세팅
+    for r, c in [ (75, 4), (76, 4) ] :
+      phone_set = new_ws.cell(r, c)
+      phone_set.value = phone_set.value%(da_num[da])
 
     # 설문지 분류 셀 관련
     cell_value = []
@@ -735,8 +750,8 @@ else :
     <exit cond="terminated"><strong>본 조사에 참여해주셔서 감사합니다.</strong><br /><br />본격적으로 조사를 시작하기 전에, 귀하가 본 조사에 적합한 응답 대상인지 알아보기 위해 몇 가지의 질문을 드렸습니다.<br /><br />죄송합니다. 귀하께서는 본 조사의 응답 대상이 아니십니다.<br /><br />차후에 다른 온라인 조사에 참여해주시면 감사하겠습니다.<br /><br />귀하의 소중한 의견은 더 나은 제품과 서비스를 개발하는데 좋은 정보가 될 것입니다.</exit>
     <exit cond="qualified">▣ 지금까지 응답해 주셔서 대단히 감사합니다. 좋은 하루 되세요. ▣
   <br /><br />※ 본 조사에 대한 문의는 아래의 연락처로 주시기 바랍니다.
- <br />- 연구 책임자 : XXX (☎ 02-2122-TBD)
- <br />- 실사 책임자 : XXX (☎ 02-2122-TBD)</exit>
+ <br />- 연구 책임자 : 김진규 (☎ 02-2122-7357)
+ <br />- 실사 책임자 : {da} (☎ 02-2122-{da_num[da]})</exit>
     <exit cond="overquota"><strong>본 조사에 참여해 주셔서 감사합니다.</strong><br /><br />안타깝게도, 귀하께서 해당하시는 조사 대상 그룹의 조사는 이미 종료되었습니다.<br /><br />다음에 참여해 주시기 바랍니다.</exit>
   </samplesource>
 
@@ -1025,6 +1040,11 @@ status(True,'r2')
   optional="0">
   <title>면접원 정보</title>
   <comment></comment>
+  <validate>
+if this.time.val.isdigit() :
+  if not int(this.time.val) in range(1, 25) :
+    error('시간은 1~24까지의 숫자로 입력 부탁드립니다.')
+  </validate>
 <style name='el.text' rows="date"> <![CDATA[
 \@if row.styles.ss.preText or this.styles.ss.preText
     ${{row.styles.ss.preText or this.styles.ss.preText or ""}}&nbsp;
@@ -1036,7 +1056,7 @@ status(True,'r2')
 ]]></style>
   <row label="name" ss:preText="이름"/>
   <row label="date" ss:preText="면접일시"/>
-  <row label="time" verify="number;range(1,24);" ss:preText="시간" size="2"/>
+  <row label="time" verify="number" ss:preText="시간" size="2"/>
 </text>
 <suspend/>
 
