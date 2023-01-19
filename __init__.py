@@ -164,8 +164,9 @@ def pcsi_setting(survey_name='',
             Q8_array = []
             for idx, tx in enumerate(curr_hwp) :
                 if '8-' in tx and not '】' in tx:
-                  if not '실사 책임자' in tx :
-                    Q8_array.append(curr_hwp[idx+1])
+                  chk_next = curr_hwp[idx+1]
+                  if not ('실사 책임자' in chk_next or '0000' in chk_next) :
+                    Q8_array.append(chk_next)
 
             change_cells['Q8'][code] = Q8_array
 
@@ -289,24 +290,27 @@ def pcsi_setting(survey_name='',
         info_texts.append(word)
 
 
+
     # QQQ1/Q1/Q5/Q6 워딩 구분
     QQQ1_txt = {
         'KMAC' : '2023년 1~2월 기획재정부 공동실사단',
         'KSA'  : '2023년 1~2월 기획재정부/닐슨아이큐코리아(유)'    
     }
     Q1_txt = {
-        'KMAC' : '0점(전혀 그렇지 않다) 부터 1,2,3,4,5,6,7,8,9,10점(매우 그렇다)까지 동의하시는 정도가 클수록 높은 점수, 작을수록 낮은 점수를 주시면 됩니다.',
-        'KSA'  : '0점(전혀 그렇지 않다), 5점(보통), 10점(매우 그렇다)까지 동의하시는 정도가 클수록 높은 점수, 작을수록 낮은 점수를 주시면 됩니다.'
+        'KMAC' : '각 질문에 대해 고객님께서 동의하시는 정도에 따라 보기(11개) 중에서 골라주세요.<br/>0점(전혀 그렇지 않다) 부터 1, 2, 3, 4, 5, 6, 7, 8, 9, 10점(매우 그렇다)까지 동의하시는 정도가 클수록 높은 점수, 작을수록 낮은 점수를 주시면 됩니다.',
+        'KSA'  : '각 질문에 대해 고객님께서 동의하시는 정도에 따라 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10점 중에서 골라주세요. 동의하시는 정도가 클수록 높은 점수, 작을수록 낮은 점수를 주시면 됩니다.'
     }
+
 
     Q5_txt = {
-        'KMAC' : '0점(매우 나쁘다) 부터 1,2,3,4,5,6,7,8,9,10점(매우 좋다)까지 긍정적일수록 높은 점수, 부정적일수록 낮은 점수를 주시면 됩니다.',
-        'KSA'  : '0점(매우 나쁘다), 5점(똑같다), 10점(매우 좋다)까지 긍정적일수록 높은 점수, 부정적 일수록 낮은 점수를 주시면 됩니다.'
+        'KMAC' : '0점(매우 나쁘다) 부터 1, 2, 3, 4, 5, 6, 7, 8, 9, 10점(매우 좋다)까지 긍정적일수록 높은 점수, 부정적 일수록 낮은 점수를 주시면 됩니다.',
+        'KSA'  : '각 질문에 대해 고객님께서 동의하시는 정도에 따라 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10점 중에서 골라주세요. 동의하시는 정도가 클수록 높은 점수, 작을수록 낮은 점수를 주시면 됩니다.'
     }
 
+
     Q6_txt = {
-        'KMAC' : '0점(전혀 그렇지 않다) 부터 1,2,3,4,5,6,7,8,9,10점(매우 그렇다)까지 동의하시는 정도가 클수록 높은 점수, 작을수록 낮은 점수를 주시면 됩니다.',
-        'KSA'  : '0점(전혀 그렇지 않다), 5점(보통이다), 10점(매우 그렇다)까지 동의하시는 정도가 클수록 높은 점수, 작을수록 낮은 점수를 주시면 됩니다.'
+        'KMAC' : '0점(전혀 그렇지 않다) 부터 1, 2, 3, 4, 5, 6, 7, 8, 9, 10점(매우 그렇다)까지 동의하시는 정도가 클수록 높은 점수, 작을수록 낮은 점수를 주시면 됩니다.',
+        'KSA'  : '각 질문에 대해 고객님께서 동의하시는 정도에 따라 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10점 중에서 골라주세요. 동의하시는 정도가 클수록 높은 점수, 작을수록 낮은 점수를 주시면 됩니다.'
     }
 
     QQQ1_cell = new_ws.cell(16, 4)
@@ -1045,6 +1049,18 @@ status(True,'r2')
 
 <suspend/>
 
+<style name="survey.completion"><![CDATA[
+\@if not gv.survey.root.styles.ss.hideProgressBar
+    <div class="progress-bar progress-${{"top" if gv.survey.root.progressOnTop else "bottom"}}" title="@(progress-bar) - $(percent)% @(complete)">
+      <div class="progress-box-outer"><span class="progress-box-completed" style="width: $(percent)%;"></span></div>
+      <div class="progress-text"><span class="screen-readers-only">@(progress-bar) </span>$(percent)%</div>
+    </div>
+    <div><strong>${{QQQ14.selected.text if QQQ14.any else ''}}</strong></div>
+\@endif
+]]></style>
+
+<suspend/>
+
 <text 
   label="InterData"
   optional="0"
@@ -1207,8 +1223,8 @@ status(SQ3.r2,"SQ3")
 <pipe
   label="Q1_pipe"
   capture="">
-  <case label="r1" cond="KQ.r1">0점(전혀 그렇지 않다) 부터 1,2,3,4,5,6,7,8,9,10점(매우 그렇다)까지 동의하시는 정도가 클수록 높은 점수, 작을수록 낮은 점수를 주시면 됩니다.</case>
-  <case label="r2" cond="KQ.r2">0점(전혀 그렇지 않다), 5점(보통), 10점(매우 그렇다)까지 동의하시는 정도가 클수록 높은 점수, 작을수록 낮은 점수를 주시면 됩니다.</case>
+  <case label="r1" cond="KQ.r1">각 질문에 대해 고객님께서 동의하시는 정도에 따라 보기(11개) 중에서 골라주세요.<br/>0점(전혀 그렇지 않다) 부터 1, 2, 3, 4, 5, 6, 7, 8, 9, 10점(매우 그렇다)까지 동의하시는 정도가 클수록 높은 점수, 작을수록 낮은 점수를 주시면 됩니다.</case>
+  <case label="r2" cond="KQ.r2">각 질문에 대해 고객님께서 동의하시는 정도에 따라 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10점 중에서 골라주세요. 동의하시는 정도가 클수록 높은 점수, 작을수록 낮은 점수를 주시면 됩니다.</case>
   <case label="null" cond="1">UNDEFINED</case>
 </pipe>
 
@@ -1244,7 +1260,7 @@ status(SQ3.r2,"SQ3")
 <radio
   label="Q1"
   surveyDisplay="desktop">
-  <title>문 1】 먼저 <strong>${{res.pcsi_name}}</strong>에서 제공하는 서비스의 핵심내용 등에 대해 질문 드리겠습니다.<br/>각 질문에 대해 고객님께서 동의하시는 정도에 따라 보기(11개) 중에서 골라주세요.<br/>[pipe: Q1_pipe]</title>
+  <title>문 1】 먼저 <strong>${{res.pcsi_name}}</strong>에서 제공하는 서비스의 핵심내용 등에 대해 질문 드리겠습니다.<br/>[pipe: Q1_pipe]</title>
   <comment></comment>
   <col label="c0" value="0">(0)<br/>전혀<br/>그렇지<br/>않다</col>
   <col label="c1" value="1">(1)</col>
@@ -1365,8 +1381,8 @@ status(SQ3.r2,"SQ3")
 <pipe
   label="Q5_pre_pipe"
   capture="">
-  <case label="r1" cond="KQ.r1">0점(매우 나쁘다) 부터 1,2,3,4,5,6,7,8,9,10점(매우 좋다)까지 긍정적일수록 높은 점수, 부정적일수록 낮은 점수를 주시면 됩니다.</case>
-  <case label="r2" cond="KQ.r2">0점(매우 나쁘다), 5점(똑같다), 10점(매우 좋다)까지 긍정적일수록 높은 점수, 부정적 일수록 낮은 점수를 주시면 됩니다.</case>
+  <case label="r1" cond="KQ.r1">0점(매우 나쁘다) 부터 1, 2, 3, 4, 5, 6, 7, 8, 9, 10점(매우 좋다)까지 긍정적일수록 높은 점수, 부정적 일수록 낮은 점수를 주시면 됩니다.</case>
+  <case label="r2" cond="KQ.r2">각 질문에 대해 고객님께서 동의하시는 정도에 따라 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10점 중에서 골라주세요. 동의하시는 정도가 클수록 높은 점수, 작을수록 낮은 점수를 주시면 됩니다.</case>
   <case label="null" cond="1">UNDEFINED</case>
 </pipe>
 
@@ -1432,8 +1448,8 @@ status(SQ3.r2,"SQ3")
 <pipe
   label="Q6_pipe"
   capture="">
-  <case label="r1" cond="KQ.r1">0점(전혀 그렇지 않다) 부터 1,2,3,4,5,6,7,8,9,10점(매우 그렇다)까지 동의하시는 정도가 클수록 높은 점수, 작을수록 낮은 점수를 주시면 됩니다.</case>
-  <case label="r2" cond="KQ.r2">0점(전혀 그렇지 않다), 5점(보통이다), 10점(매우 그렇다)까지 동의하시는 정도가 클수록 높은 점수, 작을수록 낮은 점수를 주시면 됩니다.</case>
+  <case label="r1" cond="KQ.r1">0점(전혀 그렇지 않다) 부터 1, 2, 3, 4, 5, 6, 7, 8, 9, 10점(매우 그렇다)까지 동의하시는 정도가 클수록 높은 점수, 작을수록 낮은 점수를 주시면 됩니다.</case>
+  <case label="r2" cond="KQ.r2">각 질문에 대해 고객님께서 동의하시는 정도에 따라 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10점 중에서 골라주세요. 동의하시는 정도가 클수록 높은 점수, 작을수록 낮은 점수를 주시면 됩니다.</case>
   <case label="null" cond="1">UNDEFINED</case>
 </pipe>
 
