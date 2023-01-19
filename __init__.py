@@ -152,6 +152,7 @@ def pcsi_setting(survey_name='',
             set_word = set_word.replace('○○', '고객')
             set_word = set_word.replace(f'{key}. ', '')
             set_word = set_word.replace(f'{key}】 ', '')
+            set_word = set_word.replace(f'･', '·')
             set_word = set_word.replace(survey_name, f'<font color=blue>{survey_name}</font>')
             change_cells[key][code] = set_word.strip()
         
@@ -184,6 +185,7 @@ def pcsi_setting(survey_name='',
         
         info_txt = '<br/><br/>'.join(info_txt)
         info_txt = info_txt.replace('<br/><br/><br/><br/>', '<br/><br/>')
+        info_txt = info_txt.replace(f'･', '·')
         change_cells['info'][code] = info_txt
         
 
