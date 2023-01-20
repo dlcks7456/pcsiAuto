@@ -429,6 +429,8 @@ def pcsi_setting(survey_name='',
         for code, txt in change_cells[qid].items() :
             curr_txt = txt.replace('<font color=blue>', '<strong>')
             curr_txt = curr_txt.replace('</font>', '</strong>')
+            curr_txt = curr_txt.replace('<', '&lt;')
+            curr_txt = curr_txt.replace('>', '&gt;')
             word = f'<case label="r{code}" cond="QQQ14.r{code}">{curr_txt}</case>'
             case.append(word)
         
@@ -439,6 +441,8 @@ def pcsi_setting(survey_name='',
     for code, txt in change_cells['info'].items() :
         curr_txt = txt.replace('<font color=blue>', '<strong>')
         curr_txt = curr_txt.replace('</font>', '</strong>')
+        curr_txt = curr_txt.replace('<', '&lt;')
+        curr_txt = curr_txt.replace('>', '&gt;')
         word = f'<case label="r{code}" cond="QQQ14.r{code}">{curr_txt}</case>'
         xml_info.append(word)
 
@@ -1493,7 +1497,7 @@ status(SQ3.r2,"SQ3")
   label="Q7_pipe"
   capture="">
   <case label="r1" cond="QQQ12.r1">의 사업/활동으로 <strong>국민의 삶의 질</strong>이 향상되었다고 생각하십니까?</case>
-  <case label="r2" cond="QQQ12.r1">의 서비스를 이용하신 후, 기관의 사업/활동에 대해 <strong>신뢰감을 갖게</strong>되었습니까?</case>
+  <case label="r2" cond="QQQ12.r2">의 서비스를 이용하신 후, 기관의 사업/활동에 대해 <strong>신뢰감을 갖게</strong>되었습니까?</case>
   <case label="null" cond="1">UNDEFINED</case>
 </pipe>
 
