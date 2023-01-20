@@ -354,13 +354,13 @@ def pcsi_setting(survey_name='',
         Q8X3_js_cell.value = Q8X3_js_cell.value%('\n'.join(Q8_array))
 
     # CC 세팅
-    cc_1_cell = new_ws.cell(74, 7)
-    if division == 'KMAC' :
-      new_ws.cell(73, 7).value = None
-      cc_1_cell.value = cc_1_cell.value%('')
+    # cc_1_cell = new_ws.cell(74, 7)
+    # if division == 'KMAC' :
+    #   new_ws.cell(73, 7).value = None
+    #   cc_1_cell.value = cc_1_cell.value%('')
 
-    if division == 'KSA' :
-      cc_1_cell.value = cc_1_cell.value%('display_yn(n)')
+    # if division == 'KSA' :
+    #   cc_1_cell.value = cc_1_cell.value%('display_yn(n)')
 
     # 기관별 문항 타입 구분
     if division == 'KMAC' :
