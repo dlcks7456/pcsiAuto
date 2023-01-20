@@ -247,7 +247,7 @@ def pcsi_setting(survey_name='',
     js_logics = []
     for code, attr in change_cells['qnrs'].items() :
         qname = attr['name']
-        word = f'if(ADD05=={code}){{text=\'{qname}\';}}'
+        word = f'if(ADD05=={code}){{text="{qname}";}}'
         js_logics.append(word)
 
     QQQ1_set = new_ws.cell(16, 8)
@@ -277,7 +277,7 @@ def pcsi_setting(survey_name='',
         curr_cell = new_ws.cell(cr, cc)
         js_logics = []
         for code, txt in change_cells[qid].items() :
-            word = f'if(QQQ14=={code}){{text=\'{txt}\';}}'
+            word = f'if(QQQ14=={code}){{text="{txt}";}}'
             js_logics.append(word)
         
         curr_cell.value = curr_cell.value%('\n'.join(js_logics))
@@ -286,7 +286,7 @@ def pcsi_setting(survey_name='',
     # SQ 문항 이후 안내 문구 출력
     info_texts = []
     for code, txt in change_cells['info'].items() :
-        word = f'if(QQQ14=={code}){{text=\'{txt}\';}}'
+        word = f'if(QQQ14=={code}){{text="{txt}";}}'
         info_texts.append(word)
 
 
@@ -298,19 +298,22 @@ def pcsi_setting(survey_name='',
     }
     Q1_txt = {
         'KMAC' : '각 질문에 대해 고객님께서 동의하시는 정도에 따라 보기(11개) 중에서 골라주세요.<br/>0점(전혀 그렇지 않다) 부터 1, 2, 3, 4, 5, 6, 7, 8, 9, 10점(매우 그렇다)까지 동의하시는 정도가 클수록 높은 점수, 작을수록 낮은 점수를 주시면 됩니다.',
-        'KSA'  : '각 질문에 대해 고객님께서 동의하시는 정도에 따라 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10점 중에서 골라주세요. 동의하시는 정도가 클수록 높은 점수, 작을수록 낮은 점수를 주시면 됩니다.'
+        # 'KSA'  : '각 질문에 대해 고객님께서 동의하시는 정도에 따라 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10점 중에서 골라주세요. 동의하시는 정도가 클수록 높은 점수, 작을수록 낮은 점수를 주시면 됩니다.'
+        'KSA'  : '각 질문에 대해 고객님께서 동의하시는 정도에 따라 보기(11개) 중에서 골라주세요.<br/>0점(전혀 그렇지 않다) 부터 1, 2, 3, 4, 5, 6, 7, 8, 9, 10점(매우 그렇다)까지 동의하시는 정도가 클수록 높은 점수, 작을수록 낮은 점수를 주시면 됩니다.'
     }
 
 
     Q5_txt = {
-        'KMAC' : '0점(매우 나쁘다) 부터 1, 2, 3, 4, 5, 6, 7, 8, 9, 10점(매우 좋다)까지 긍정적일수록 높은 점수, 부정적 일수록 낮은 점수를 주시면 됩니다.',
-        'KSA'  : '각 질문에 대해 고객님께서 동의하시는 정도에 따라 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10점 중에서 골라주세요. 동의하시는 정도가 클수록 높은 점수, 작을수록 낮은 점수를 주시면 됩니다.'
+        'KMAC' : '<br/>0점(매우 나쁘다) 부터 1, 2, 3, 4, 5, 6, 7, 8, 9, 10점(매우 좋다)까지 긍정적일수록 높은 점수, 부정적 일수록 낮은 점수를 주시면 됩니다.',
+        #'KSA'  : '각 질문에 대해 고객님께서 동의하시는 정도에 따라 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10점 중에서 골라주세요. 동의하시는 정도가 클수록 높은 점수, 작을수록 낮은 점수를 주시면 됩니다.'
+        'KSA' : '<br/>0점(매우 나쁘다) 부터 1, 2, 3, 4, 5, 6, 7, 8, 9, 10점(매우 좋다)까지 긍정적일수록 높은 점수, 부정적 일수록 낮은 점수를 주시면 됩니다.'
     }
 
 
     Q6_txt = {
-        'KMAC' : '0점(전혀 그렇지 않다) 부터 1, 2, 3, 4, 5, 6, 7, 8, 9, 10점(매우 그렇다)까지 동의하시는 정도가 클수록 높은 점수, 작을수록 낮은 점수를 주시면 됩니다.',
-        'KSA'  : '각 질문에 대해 고객님께서 동의하시는 정도에 따라 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10점 중에서 골라주세요. 동의하시는 정도가 클수록 높은 점수, 작을수록 낮은 점수를 주시면 됩니다.'
+        'KMAC' : '<br/>0점(전혀 그렇지 않다) 부터 1, 2, 3, 4, 5, 6, 7, 8, 9, 10점(매우 그렇다)까지 동의하시는 정도가 클수록 높은 점수, 작을수록 낮은 점수를 주시면 됩니다.',
+        # 'KSA'  : '각 질문에 대해 고객님께서 동의하시는 정도에 따라 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10점 중에서 골라주세요. 동의하시는 정도가 클수록 높은 점수, 작을수록 낮은 점수를 주시면 됩니다.'
+        'KSA'  : '<br/>0점(전혀 그렇지 않다) 부터 1, 2, 3, 4, 5, 6, 7, 8, 9, 10점(매우 그렇다)까지 동의하시는 정도가 클수록 높은 점수, 작을수록 낮은 점수를 주시면 됩니다.'
     }
 
     QQQ1_cell = new_ws.cell(16, 4)
@@ -349,6 +352,15 @@ def pcsi_setting(survey_name='',
 
         Q8X1_js_cell.value = Q8X1_js_cell.value%('\n'.join(Q8_array))
         Q8X3_js_cell.value = Q8X3_js_cell.value%('\n'.join(Q8_array))
+
+    # CC 세팅
+    cc_1_cell = new_ws.cell(74, 7)
+    if division == 'KMAC' :
+      new_ws.cell(73, 7).value = None
+      cc_1_cell.value = cc_1_cell.value%('')
+
+    if division == 'KSA' :
+      cc_1_cell.value = cc_1_cell.value%('display_yn(n)')
 
     # 기관별 문항 타입 구분
     if division == 'KMAC' :
@@ -483,6 +495,9 @@ def pcsi_setting(survey_name='',
   <title>(HIDDEN) Q8-1 제시 속성</title>
   <comment></comment>
 <exec>
+for eachRow in HQ8X1.rows :
+	eachRow.val = None
+
 Q8attrs = {Q8_array}
 attrs = Q8attrs[QQQ14.selected.label]
 for idx, attr in enumerate(attrs) :
@@ -585,9 +600,8 @@ for eachRow in HQ8X2.rows :
   <case label="null" cond="1">UNDEFINED</case>
 </pipe>
 
-<checkbox
-  label="Q10"
-  atleast="1">
+<radio
+  label="Q10">
   <title>문 10】 [pipe: Q10_pipe]</title>
   <comment></comment>
   <row label="r1" value="1">스스로 검색 및 탐색</row>
@@ -595,7 +609,7 @@ for eachRow in HQ8X2.rows :
   <row label="r3" value="3">주위 지인들의 추천</row>
   <row label="r4" value="4">광고/홍보(신문광고 등)</row>
   <row label="r5" value="5" open="1" openSize="25" randomize="0">기타(적을 것 :)</row>
-</checkbox>
+</radio>
 <suspend/>
 
 
