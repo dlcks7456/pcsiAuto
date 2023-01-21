@@ -154,8 +154,12 @@ def pcsi_setting(survey_name='',
             set_word = curr_txt[0]
             set_word = set_word.replace('○○', '고객')
             set_word = set_word.replace(f'{key}. ', '')
-            set_word = set_word.replace(f'{key}】 ', '')
+            set_word = set_word.replace(f'{key}】', '')
             set_word = set_word.replace(f'･', '·')
+            if '】' in set_word :
+              set_word = set_word.split('】')
+              set_word = ''.join(set_word[1:])
+            
             set_word = set_word.replace(survey_name, f'<font color=blue>{survey_name}</font>')
             change_cells[key][code] = set_word.strip()
         
@@ -225,10 +229,23 @@ def pcsi_setting(survey_name='',
     name_set = new_ws.cell(27, 6)
     name_set.value = name_set.value%(survey_name)
 
-    # 실사 담당자 세팅
+    last_text = {
+        'KMAC' : '''<div align=center style='border: 1px solid #800000;padding:10px; white-space: normal; font-size:13px; border-collapse: collapse;background-color:#5579d7;color:#ffffff'>
+▣ 지금까지 응답해 주셔서 대단히 감사합니다. 좋은 하루 되세요. ▣</div>
+(읽어주고 조사 종료) 본 조사에 대한 문의는 02-2122-%s로 연락 주시기 바랍니다.''',
+        'KSA'  : '''<div align=center style='border: 1px solid #800000;padding:10px; white-space: normal; font-size:13px; border-collapse: collapse;background-color:#5579d7;color:#ffffff'>
+▣ 아래 내용 읽어주고 조사 종료 ▣</div>
+<div style="text-align:center;">
+지금까지 기획재정부에서 주관하는 공공기관 고객만족도 조사 공동실사단의 면접원 OOO이었습니다.<br/>
+본 조사에 대한 문의는 02-2122-%s로 연락 주시기 바랍니다.<br/>
+응답 해 주셔서 대단히 감사합니다. 좋은 하루 되세요.
+</div>'''
+    }
+
+    # 마무리 인사 및 실사 담당자 세팅
     for r, c in [ (75, 4), (76, 4) ] :
-      phone_set = new_ws.cell(r, c)
-      phone_set.value = phone_set.value%(da_num[da])
+      last_page = new_ws.cell(r, c)
+      last_page.value = last_page.value%(last_text[division]%da_num[da])
 
     # 설문지 분류 셀 관련
     cell_value = []
@@ -354,13 +371,13 @@ def pcsi_setting(survey_name='',
         Q8X3_js_cell.value = Q8X3_js_cell.value%('\n'.join(Q8_array))
 
     # CC 세팅
-    # cc_1_cell = new_ws.cell(74, 7)
+    cc_1_cell = new_ws.cell(74, 7)
     # if division == 'KMAC' :
     #   new_ws.cell(73, 7).value = None
     #   cc_1_cell.value = cc_1_cell.value%('')
 
-    # if division == 'KSA' :
-    #   cc_1_cell.value = cc_1_cell.value%('display_yn(n)')
+    if division == 'KSA' :
+      cc_1_cell.value = cc_1_cell.value%('display_yn(n)')
 
     # 기관별 문항 타입 구분
     if division == 'KMAC' :
@@ -1073,7 +1090,8 @@ status(True,'r2')
       <div class="progress-box-outer"><span class="progress-box-completed" style="width: $(percent)%;"></span></div>
       <div class="progress-text"><span class="screen-readers-only">@(progress-bar) </span>$(percent)%</div>
     </div>
-    <div><strong>${{QQQ14.selected.text if QQQ14.any else ''}}</strong></div>
+    <div><strong>${{'- %s'%(QQQ14.selected.text) if QQQ14.any else ''}}</strong></div>
+    <div><strong>${{'- %s'%(QQQ12.selected.text) if QQQ12.any else ''}}</strong></div>
 \@endif
 ]]></style>
 
@@ -1545,30 +1563,38 @@ DQ1. 고객님의 성별은 어떻게 되십니까? </title>
 
   <suspend/>
 
-  <radio 
-   label="BB"
-   randomize="0">
-    <title>통계적인 목적으로 고객님께서 거주하고 계시는 지역에 대해 여쭙겠습니다.</title>
-    <row label="r1" value="1">서울</row>
-    <row label="r2" value="2">부산</row>
-    <row label="r3" value="3">대구</row>
-    <row label="r4" value="4">인천</row>
-    <row label="r5" value="5">광주</row>
-    <row label="r6" value="6">대전</row>
-    <row label="r7" value="7">울산</row>
-    <row label="r8" value="8">경기</row>
-    <row label="r9" value="9">강원</row>
-    <row label="r10" value="10">충남</row>
-    <row label="r11" value="11">충북</row>
-    <row label="r12" value="12">세종</row>
-    <row label="r13" value="13">전남</row>
-    <row label="r14" value="14">전북</row>
-    <row label="r15" value="15">경남</row>
-    <row label="r16" value="16">경북</row>
-    <row label="r17" value="17">제주</row>
-  </radio>
+<pipe
+  label="BB_pipe"
+  capture="">
+  <case label="r1" cond="QQQ12.r1">응답자 소재지</case>
+  <case label="r2" cond="QQQ12.r2">법인 소재지</case>
+  <case label="null" cond="1">UNDEFINED</case>
+</pipe>
 
-  <suspend/>
+<radio 
+  label="BB"
+  randomize="0">
+  <title><strong>[pipe: BB_pipe]</strong></title>
+  <row label="r1" value="1">서울</row>
+  <row label="r2" value="2">부산</row>
+  <row label="r3" value="3">대구</row>
+  <row label="r4" value="4">인천</row>
+  <row label="r5" value="5">광주</row>
+  <row label="r6" value="6">대전</row>
+  <row label="r7" value="7">울산</row>
+  <row label="r8" value="8">경기</row>
+  <row label="r9" value="9">강원</row>
+  <row label="r10" value="10">충남</row>
+  <row label="r11" value="11">충북</row>
+  <row label="r12" value="12">세종</row>
+  <row label="r13" value="13">전남</row>
+  <row label="r14" value="14">전북</row>
+  <row label="r15" value="15">경남</row>
+  <row label="r16" value="16">경북</row>
+  <row label="r17" value="17">제주</row>
+</radio>
+
+<suspend/>
 
 <text
   label="RespData"
