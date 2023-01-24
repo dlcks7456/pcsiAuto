@@ -376,8 +376,11 @@ def pcsi_setting(survey_name='',
     #   new_ws.cell(73, 7).value = None
     #   cc_1_cell.value = cc_1_cell.value%('')
 
-    if division == 'KSA' :
-      cc_1_cell.value = cc_1_cell.value%('display_yn(n)')
+    # if division == 'KSA' :
+    #   cc_1_cell.value = cc_1_cell.value%('display_yn(n)')
+    
+    cc_value = 'display_yn(n)' if division == 'KSA' else '' if division == 'KMAC' else ''
+    cc_1_cell.value = cc_1_cell.value%(cc_value)
 
     # 기관별 문항 타입 구분
     if division == 'KMAC' :
