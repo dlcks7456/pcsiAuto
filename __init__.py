@@ -559,7 +559,7 @@ for idx, attr in enumerate(attrs) :
   surveyDisplay="desktop">
   <title>문 8】 <strong>${{res.pcsi_name}}</strong>에서 경험하신 서비스의 단계에 대해 고객님께서 만족하시는 정도에 따라 0점(매우 불만족), 1, 2, 3, 4, 5, 6, 7, 8, 9, 10(매우 만족)점 중에서 골라주세요.<br/>
 만족하시는 정도가 클수록 높은 점수, 작을수록 낮은 점수를 주시면 됩니다.</title>
-  <comment></comment>
+  <comment>모름/거절 응답이 필요 시 조사원을 호출해주세요</comment>
   <col label="c0" value="0">(0)<br/>매우<br/>불만족</col>
   <col label="c1" value="1">(1)</col>
   <col label="c2" value="2">(2)</col>
