@@ -371,6 +371,11 @@ def pcsi_setting(survey_name='',
         Q8X1_js_cell.value = Q8X1_js_cell.value%('\n'.join(Q8_array))
         Q8X3_js_cell.value = Q8X3_js_cell.value%('\n'.join(Q8_array))
 
+    # DQ 마지막 문항 syntax 세팅
+    DQ_cell = new_ws.cell(71, 7)
+    DQ_syntax = 'if(true) goto BB' if division == 'KSA' else 'if(QQQ12==1) goto BB' if division == 'KMAC' else ''
+    DQ_cell.value = DQ_cell.value%(DQ_syntax)
+
     # CC 세팅
     cc_1_cell = new_ws.cell(74, 7)
     # if division == 'KMAC' :
