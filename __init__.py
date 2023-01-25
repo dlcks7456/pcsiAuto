@@ -311,7 +311,8 @@ def pcsi_setting(survey_name='',
     # QQQ1/Q1/Q5/Q6 워딩 구분
     QQQ1_txt = {
         'KMAC' : '2023년 1~2월 기획재정부 공동실사단',
-        'KSA'  : '2023년 1~2월 기획재정부/닐슨아이큐코리아(유)'    
+        # 'KSA'  : '2023년 1~2월 기획재정부/닐슨아이큐코리아(유)'    
+        'KSA' : '2023년 1~2월 기획재정부 공동실사단'
     }
     Q1_txt = {
         'KMAC' : '각 질문에 대해 고객님께서 동의하시는 정도에 따라 보기(11개) 중에서 골라주세요.<br/>0점(전혀 그렇지 않다) 부터 1, 2, 3, 4, 5, 6, 7, 8, 9, 10점(매우 그렇다)까지 동의하시는 정도가 클수록 높은 점수, 작을수록 낮은 점수를 주시면 됩니다.',
@@ -495,7 +496,7 @@ def pcsi_setting(survey_name='',
         HQ8_rows = '\n'.join(HQ8_rows)
 
     # CC 세팅
-    cc_cond = 'cond=\'0\'' if division == 'KSA' else '' if division == 'KMAC' else ''
+    cc_cond = 'cond="0"' if division == 'KSA' else '' if division == 'KMAC' else ''
 
     op_num = ''
     if division == 'KMAC' :
@@ -1132,7 +1133,7 @@ status(True,'r2')
   label="QQQ1_pipe"
   capture="">
   <case label="r1" cond="KQ.r1">2023년 1~2월 기획재정부 공동실사단</case>
-  <case label="r2" cond="KQ.r2">2023년 1~2월 기획재정부</case>
+  <case label="r2" cond="KQ.r2">2023년 1~2월 기획재정부 공동실사단</case>
   <case label="null" cond="1">UNDEFINED</case>
 </pipe>
 
