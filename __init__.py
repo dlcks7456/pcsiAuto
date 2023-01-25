@@ -230,9 +230,16 @@ def pcsi_setting(survey_name='',
     name_set.value = name_set.value%(survey_name)
 
     last_text = {
-        'KMAC' : '''<div align=center style='border: 1px solid #800000;padding:10px; white-space: normal; font-size:13px; border-collapse: collapse;background-color:#5579d7;color:#ffffff'>
-▣ 지금까지 응답해 주셔서 대단히 감사합니다. 좋은 하루 되세요. ▣</div>
-(읽어주고 조사 종료) 본 조사에 대한 문의는 02-2122-%s로 연락 주시기 바랍니다.''',
+        'KMAC'  : '''<div align=center style='border: 1px solid #800000;padding:10px; white-space: normal; font-size:13px; border-collapse: collapse;background-color:#5579d7;color:#ffffff'>
+▣ 아래 내용 읽어주고 조사 종료 ▣</div>
+<div style="text-align:center;">
+지금까지 기획재정부에서 주관하는 공공기관 고객만족도 조사 공동실사단의 면접원 OOO이었습니다.<br/>
+본 조사에 대한 문의는 02-2122-%s로 연락 주시기 바랍니다.<br/>
+응답 해 주셔서 대단히 감사합니다. 좋은 하루 되세요.
+</div>''',
+#         'KMAC' : '''<div align=center style='border: 1px solid #800000;padding:10px; white-space: normal; font-size:13px; border-collapse: collapse;background-color:#5579d7;color:#ffffff'>
+# ▣ 지금까지 응답해 주셔서 대단히 감사합니다. 좋은 하루 되세요. ▣</div>
+# (읽어주고 조사 종료) 본 조사에 대한 문의는 02-2122-%s로 연락 주시기 바랍니다.''',
         'KSA'  : '''<div align=center style='border: 1px solid #800000;padding:10px; white-space: normal; font-size:13px; border-collapse: collapse;background-color:#5579d7;color:#ffffff'>
 ▣ 아래 내용 읽어주고 조사 종료 ▣</div>
 <div style="text-align:center;">
@@ -550,7 +557,7 @@ for idx, attr in enumerate(attrs) :
   label="Q8X1"
   rowCond="HQ8X1.rows[row.index]"
   surveyDisplay="desktop">
-  <title>문 8】 <strong>${{res.pcsi_name}}</strong>에서 경험하신 서비스의 단계에 대해 고객님께서 만족하시는 정도에 따라 0점(매우 불만족), 1, 2, 3, 4, 5, 6, 7, 8, 9, 10(매우 만족)점 중에서 골라주세요.
+  <title>문 8】 <strong>${{res.pcsi_name}}</strong>에서 경험하신 서비스의 단계에 대해 고객님께서 만족하시는 정도에 따라 0점(매우 불만족), 1, 2, 3, 4, 5, 6, 7, 8, 9, 10(매우 만족)점 중에서 골라주세요.<br/>
 만족하시는 정도가 클수록 높은 점수, 작을수록 낮은 점수를 주시면 됩니다.</title>
   <comment></comment>
   <col label="c0" value="0">(0)<br/>매우<br/>불만족</col>
