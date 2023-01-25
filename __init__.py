@@ -8,6 +8,7 @@ import openpyxl
 from openpyxl import load_workbook
 from openpyxl.styles import Font, PatternFill, Border, Alignment, Color, fills, Side
 from copy import copy
+from datetime import datetime
 
 def get_hwp_text(filename):
     f = olefile.OleFileIO(filename)
@@ -128,6 +129,7 @@ def pcsi_setting(survey_name='',
         '정미지' : 7189,
     }
 
+    now_year = datetime.now().year
 
     change_cells = OrderedDict()
     for key in key_texts :
@@ -773,7 +775,7 @@ else :
 
     xml = f'''<?xml version="1.0" encoding="UTF-8"?>
 <survey 
-  alt="{op_num}_PCSI_{division}_{survey_name}_현장조사"
+  alt="{op_num}_PCSI_{division}_{now_year}_{survey_name}_현장조사"
   autosaveKey="UID"
   browserDupes=""
   builder:wizardCompleted="1"
