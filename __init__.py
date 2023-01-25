@@ -494,6 +494,8 @@ def pcsi_setting(survey_name='',
         Q8_rows = '\n'.join(Q8_rows)
         HQ8_rows = '\n'.join(HQ8_rows)
 
+    # CC 세팅
+    cc_cond = 'cond=\'0\'' if division == 'KSA' else '' if division == 'KMAC' else ''
 
     op_num = ''
     if division == 'KMAC' :
@@ -1596,6 +1598,18 @@ DQ1. 고객님의 성별은 어떻게 되십니까? </title>
   <row label="r16" value="16">경북</row>
   <row label="r17" value="17">제주</row>
 </radio>
+
+<text
+  label="CC"
+  size="40"
+  optional="1"
+  {cc_cond}>
+  <title>실례지만 어느 구, 어느 동 까지 말씀해 주시겠습니까?</title>
+  <comment></comment>
+  <row label="r1" ss:postText="구"/>
+  <row label="r2" ss:postText="동"/>
+  <noanswer label="na">응답 거절</noanswer>
+</text>
 
 <suspend/>
 
