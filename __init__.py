@@ -252,7 +252,7 @@ def pcsi_setting(survey_name='',
     }
 
     # 마무리 인사 및 실사 담당자 세팅
-    for r, c in [ (75, 4), (76, 4) ] :
+    for r, c in [ (76, 4), (77, 4) ] :
       last_page = new_ws.cell(r, c)
       last_page.value = last_page.value%(last_text[division]%da_num[da])
 
@@ -293,9 +293,9 @@ def pcsi_setting(survey_name='',
     Q_cell_dict = {
         'SQ3' : (30, 8),
         'SQ4' : (31, 8),
-        '문 9' : (61, 8),
-        '문 10' : (62, 8), 
-        '문 12' : (64, 8),
+        '문 9' : (62, 8),
+        '문 10' : (63, 8), 
+        '문 12' : (65, 8),
     }
 
     for qid in key_texts :
@@ -381,12 +381,12 @@ def pcsi_setting(survey_name='',
         Q8X3_js_cell.value = Q8X3_js_cell.value%('\n'.join(Q8_array))
 
     # DQ 마지막 문항 syntax 세팅
-    DQ_cell = new_ws.cell(71, 7)
+    DQ_cell = new_ws.cell(72, 7)
     DQ_syntax = 'if(true) goto BB' if division == 'KSA' else 'if(QQQ12==1) goto BB' if division == 'KMAC' else ''
     DQ_cell.value = DQ_cell.value%(DQ_syntax)
 
     # CC 세팅
-    cc_1_cell = new_ws.cell(74, 7)
+    cc_1_cell = new_ws.cell(75, 7)
     # if division == 'KMAC' :
     #   new_ws.cell(73, 7).value = None
     #   cc_1_cell.value = cc_1_cell.value%('')
@@ -400,13 +400,13 @@ def pcsi_setting(survey_name='',
     # 기관별 문항 타입 구분
     if division == 'KMAC' :
         # DQ2
-        new_ws.cell(66, 7).value = None
-        new_ws.delete_rows(68, 3)
+        new_ws.cell(67, 7).value = None
+        new_ws.delete_rows(69, 3)
         new_ws.delete_rows(56, 9)
 
     if division == 'KSA' :
         # DQ2X1, DQ2X2
-        new_ws.delete_rows(67, 1)
+        new_ws.delete_rows(68, 1)
         new_ws.delete_rows(55, 1)
 
     info_cell = new_ws.cell(33, 8)
