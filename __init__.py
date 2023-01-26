@@ -404,7 +404,7 @@ def pcsi_setting(survey_name='',
         # DQ2
         new_ws.cell(67, 7).value = None
         new_ws.delete_rows(69, 3)
-        new_ws.delete_rows(56, 9)
+        new_ws.delete_rows(56, 10)
 
     if division == 'KSA' :
         # DQ2X1, DQ2X2
