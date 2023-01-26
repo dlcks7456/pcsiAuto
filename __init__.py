@@ -145,6 +145,8 @@ def pcsi_setting(survey_name='',
         del_hwp = hwp.replace('.hwp', '')
         code, label = del_hwp.split('.')
         name, qtype = label.split('_')
+        name = name.strip()
+        qtype = qtype.strip()
         change_cells['qnrs'][code] = {'name': name, 'type': qtype, 'type_code': type_code[qtype]}
         
         # SQ 세팅 (공통)
