@@ -828,6 +828,17 @@ else :
     <exit cond="overquota"><strong>본 조사에 참여해 주셔서 감사합니다.</strong><br /><br />안타깝게도, 귀하께서 해당하시는 조사 대상 그룹의 조사는 이미 종료되었습니다.<br /><br />다음에 참여해 주시기 바랍니다.</exit>
   </samplesource>
 
+  <samplesource list="1">
+    <title>Open Survey - live</title>
+    <completed>귀하께서는 이미 본 설문에 접속 하신 것으로 확인 됩니다.</completed>
+    <exit cond="terminated"><strong>본 조사에 참여해주셔서 감사합니다.</strong><br /><br />본격적으로 조사를 시작하기 전에, 귀하가 본 조사에 적합한 응답 대상인지 알아보기 위해 몇 가지의 질문을 드렸습니다.<br /><br />죄송합니다. 귀하께서는 본 조사의 응답 대상이 아니십니다.<br /><br />차후에 다른 온라인 조사에 참여해주시면 감사하겠습니다.<br /><br />귀하의 소중한 의견은 더 나은 제품과 서비스를 개발하는데 좋은 정보가 될 것입니다.</exit>
+    <exit cond="qualified">▣ 지금까지 응답해 주셔서 대단히 감사합니다. 좋은 하루 되세요. ▣
+  <br /><br />※ 본 조사에 대한 문의는 아래의 연락처로 주시기 바랍니다.
+ <br />- 연구 책임자 : 김진규 (☎ 02-2122-7357)
+ <br />- 실사 책임자 : {da} (☎ 02-2122-{da_num[da]})</exit>
+    <exit cond="overquota"><strong>본 조사에 참여해 주셔서 감사합니다.</strong><br /><br />안타깝게도, 귀하께서 해당하시는 조사 대상 그룹의 조사는 이미 종료되었습니다.<br /><br />다음에 참여해 주시기 바랍니다.</exit>
+  </samplesource>
+
   <samplesource list="9">
     <title>UserIdSampleSource</title>
     <invalid>URL에 정보가 누락되었습니다. 기존의 초대받은 URL을 확인해 주시기 바랍니다.</invalid>
