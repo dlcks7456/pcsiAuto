@@ -1589,7 +1589,7 @@ DQ1. 고객님의 성별은 어떻게 되십니까? </title>
   <radio 
    label="DQ3"
    randomize="0">
-    <title>DQ3. 고객님께서는 공공기관 고객만족도 조사와 관련하여 최근 3개월 이내에 예술의전당으로부터 거절할 수 없을 정도로 유리한 응답을 해 달라는 요청을 받으신 경험이 있으십니까? </title>
+    <title>DQ3. 고객님께서는 공공기관 고객만족도 조사와 관련하여 최근 3개월 이내에 <strong>${{res.pcsi_name}}</strong>으로부터 거절할 수 없을 정도로 유리한 응답을 해 달라는 요청을 받으신 경험이 있으십니까? </title>
     <row label="r1" value="1">있다</row>
     <row label="r2" value="2">없다</row>
   </radio>
